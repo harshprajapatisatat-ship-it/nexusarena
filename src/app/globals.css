@@ -1,0 +1,322 @@
+@import "tailwindcss";
+
+/* ============================================================
+   NEXUS ARENA — Design tokens
+   ============================================================ */
+@theme {
+  /* Brand neon */
+  --color-neon-blue: #00e5ff;
+  --color-neon-purple: #7c3aed;
+  --color-neon-pink: #ff2e88;
+  --color-neon-lime: #b6ff3c;
+
+  /* Surfaces (dark-first) */
+  --color-void: #04050a;
+  --color-abyss: #070911;
+  --color-carbon: #0c0f1a;
+  --color-slate-deep: #131826;
+  --color-edge: #1e2537;
+
+  /* Text */
+  --color-ink: #eef2ff;
+  --color-ink-dim: #9aa6c4;
+  --color-ink-faint: #64708f;
+
+  /* Type */
+  --font-display: var(--font-orbitron), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Animations */
+  --animate-gradient-pan: gradient-pan 12s ease infinite;
+  --animate-float-slow: float-slow 7s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-scan: scan 5s linear infinite;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-flicker: flicker 4.5s linear infinite;
+}
+
+@keyframes gradient-pan {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(2deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes flicker {
+  0%,
+  93%,
+  100% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 0.55;
+  }
+  96% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.7;
+  }
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  :root {
+    color-scheme: dark;
+    --grid-line: rgba(0, 229, 255, 0.055);
+  }
+
+  * {
+    border-color: var(--color-edge);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Ambient grid + vignette behind everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 78%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--color-neon-pink);
+    color: #fff;
+  }
+
+  /* Focus ring — visible for keyboard users (WCAG 2.4.7) */
+  :focus-visible {
+    outline: 2px solid var(--color-neon-blue);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-abyss);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-neon-blue), var(--color-neon-purple));
+    border-radius: 99px;
+    border: 2px solid var(--color-abyss);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--color-neon-pink), var(--color-neon-purple));
+  }
+}
+
+/* ============================================================
+   Component utilities
+   ============================================================ */
+@utility glass {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    rgba(124, 58, 237, 0.05) 100%
+  );
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+@utility glass-strong {
+  background: linear-gradient(145deg, rgba(14, 18, 32, 0.92), rgba(8, 10, 18, 0.82));
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-neon-blue),
+    var(--color-neon-purple) 45%,
+    var(--color-neon-pink)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-gradient-pan);
+}
+
+@utility neon-border {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--color-carbon), var(--color-carbon)) padding-box,
+    linear-gradient(120deg, var(--color-neon-blue), var(--color-neon-purple), var(--color-neon-pink))
+      border-box;
+}
+
+@utility glow-blue {
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.25),
+    0 0 28px -6px rgba(0, 229, 255, 0.55);
+}
+
+@utility glow-pink {
+  box-shadow:
+    0 0 0 1px rgba(255, 46, 136, 0.25),
+    0 0 28px -6px rgba(255, 46, 136, 0.55);
+}
+
+@utility glow-purple {
+  box-shadow:
+    0 0 0 1px rgba(124, 58, 237, 0.3),
+    0 0 32px -6px rgba(124, 58, 237, 0.6);
+}
+
+/* Angular "gaming" corner clip */
+@utility clip-corner {
+  clip-path: polygon(0 14px, 14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+}
+
+@utility clip-notch {
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+@utility shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-ink-dim) 0%,
+    #fff 50%,
+    var(--color-ink-dim) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-shimmer);
+}
+
+/* Hides content visually but keeps it for screen readers */
+@utility sr-only-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+
+  &:focus {
+    position: fixed;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
+
+/* ============================================================
+   Reduced motion (WCAG 2.3.3)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
